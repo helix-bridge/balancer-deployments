@@ -63,6 +63,9 @@ export default {
   mode: {
     InitialFactories: [],
   },
+  crab: {
+    InitialFactories: [],
+  },
   sepolia: {
     InitialFactories: [],
   },

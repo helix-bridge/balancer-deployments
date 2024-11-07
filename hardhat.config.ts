@@ -463,6 +463,14 @@ export default {
           browserURL: 'https://modescan.io',
         },
       },
+      {
+        network: 'crab',
+        chainId: 44,
+        urls: {
+          apiURL: 'https://crab-scan.darwinia.network/api',
+          browserURL: 'https://crab-scan.darwinia.network',
+        },
+      },
     ],
   },
 };

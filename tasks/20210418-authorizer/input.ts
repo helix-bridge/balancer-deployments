@@ -39,4 +39,7 @@ export default {
   mode: {
     admin: '0x4f22C2784Cbd2B24a172566491Ee73fee1A63c2e',
   },
+  crab: {
+    admin: '0x0f14341A7f464320319025540E8Fe48Ad0fe5aec',
+  },
 };
