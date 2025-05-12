@@ -471,6 +471,14 @@ export default {
           browserURL: 'https://crab-scan.darwinia.network',
         },
       },
+      {
+        network: 'darwinia',
+        chainId: 46,
+        urls: {
+          apiURL: 'https://explorer.darwinia.network/api',
+          browserURL: 'https://explorer.darwinia.network',
+        },
+      },
     ],
   },
 };

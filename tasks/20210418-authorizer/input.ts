@@ -42,4 +42,7 @@ export default {
   crab: {
     admin: '0x0f14341A7f464320319025540E8Fe48Ad0fe5aec',
   },
+  darwinia: {
+    admin: '0x0f14341A7f464320319025540E8Fe48Ad0fe5aec',
+  },
 };

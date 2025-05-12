@@ -50,6 +50,9 @@ export default {
   crab: {
     InitialDeniedTokens: [],
   },
+  darwinia: {
+    InitialDeniedTokens: [],
+  },
   sepolia: {
     InitialDeniedTokens: [],
   },

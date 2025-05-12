@@ -50,5 +50,9 @@
   "crab": {
     "chainId": 44,
     "block-explorer": "https://crab-scan.darwinia.network"
+  },
+  "darwinia": {
+    "chainId": 46,
+    "block-explorer": "https://explorer.darwinia.network"
   }
 }

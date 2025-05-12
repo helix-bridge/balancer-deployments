@@ -66,6 +66,9 @@ export default {
   crab: {
     InitialFactories: [],
   },
+  darwinia: {
+    InitialFactories: [],
+  },
   sepolia: {
     InitialFactories: [],
   },
