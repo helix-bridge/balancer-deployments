@@ -11,7 +11,7 @@ yarn hardhat deploy --network darwinia --id 20220725-protocol-fee-percentages-pr
 yarn hardhat deploy --network darwinia --id 20220721-balancer-queries
 yarn hardhat deploy --network darwinia --id 20220517-protocol-fee-withdrawer
 yarn hardhat deploy --network darwinia --id 20220325-authorizer-adaptor
-<!-- yarn hardhat deploy --network darwinia --id 20211202-no-protocol-fee-lbp -->
+yarn hardhat deploy --network darwinia --id 20211202-no-protocol-fee-lbp
 yarn hardhat deploy --network darwinia --id 20210418-vault
 yarn hardhat deploy --network darwinia --id 20210418-authorizer
 ```

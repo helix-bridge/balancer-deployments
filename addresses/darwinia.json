@@ -25,6 +25,19 @@
     ],
     "status": "ACTIVE"
   },
+  "20211202-no-protocol-fee-lbp": {
+    "contracts": [
+      {
+        "name": "NoProtocolFeeLiquidityBootstrappingPoolFactory",
+        "address": "0x6EA8829766D2e372faB7652865b9cC4E86457547"
+      },
+      {
+        "name": "MockLiquidityBootstrappingPool",
+        "address": "0x5843199C8530f43aA1bae8D43a44423B1F8dD711"
+      }
+    ],
+    "status": "ACTIVE"
+  },
   "20220325-authorizer-adaptor": {
     "contracts": [
       {
