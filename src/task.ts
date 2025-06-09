@@ -1,7 +1,10 @@
 import fs from 'fs';
 import path, { extname } from 'path';
 import { BuildInfo, CompilerOutputContract } from 'hardhat/types';
-import { Contract } from 'ethers';
+import { Contract, ethers } from 'ethers';
+import { hexToBytes, Address } from '@ethereumjs/util';
+import { Chain, Common, Hardfork } from '@ethereumjs/common';
+import { EVM } from '@ethereumjs/evm';
 import { getContractAddress } from '@ethersproject/address';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
@@ -24,10 +27,15 @@ import {
 import { getContractDeploymentTransactionHash, saveContractDeploymentTransactionHash } from './network';
 import { getTaskActionIds } from './actionId';
 import { getArtifactFromContractOutput } from './artifact';
+import { getSigner } from './signers';
 
-const TASKS_DIRECTORY = path.resolve(__dirname, '../tasks');
-const DEPRECATED_DIRECTORY = path.join(TASKS_DIRECTORY, 'deprecated');
-const SCRIPTS_DIRECTORY = path.join(TASKS_DIRECTORY, 'scripts');
+// Maps to ../v2 and ../v3.
+const VERSION_ROOTS = ['v2', 'v3'].map((version) => path.resolve(__dirname, `../${version}`));
+
+// Maps to v2/tasks, v3/tasks, etc.
+const getTasksDir = (versionRoot: string) => path.resolve(versionRoot, 'tasks');
+const getDeprecatedDir = (versionRoot: string) => path.resolve(versionRoot, 'deprecated');
+const getScriptsDir = (versionRoot: string) => path.resolve(versionRoot, 'scripts');
 
 export enum TaskMode {
   LIVE, // Deploys and saves outputs
@@ -42,11 +50,18 @@ export enum TaskStatus {
   SCRIPT,
 }
 
+type ContractInfo = {
+  name: string;
+  expectedAddress: string;
+  args: Array<Param>;
+};
+
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 export default class Task {
   id: string;
   mode: TaskMode;
+  evm: Promise<EVM>;
 
   _network?: Network;
   _verifier?: Verifier;
@@ -57,6 +72,7 @@ export default class Task {
     this.mode = mode;
     this._network = network;
     this._verifier = verifier;
+    this.evm = this.createEVM();
   }
 
   get network(): string {
@@ -105,6 +121,163 @@ export default class Task {
     return instance;
   }
 
+  async deployFactoryContracts(
+    populatedDeployTransaction: ethers.PopulatedTransaction,
+    expectedContracts: Array<string>,
+    needsDeploy: boolean,
+    from?: SignerWithAddress,
+    force?: boolean
+  ): Promise<ethers.providers.TransactionReceipt | undefined> {
+    if (!needsDeploy || this.mode == TaskMode.CHECK) {
+      return undefined;
+    }
+
+    const output = this.output({ ensure: false });
+
+    if (force == false) {
+      let needsDeploy = false;
+      for (const name of expectedContracts) {
+        if (!output[name]) {
+          needsDeploy = true;
+        }
+
+        logger.info(`${name} already deployed at ${output[name]}`);
+      }
+
+      if (needsDeploy) {
+        logger.info('Some contracts were not deployed, re-deploying all contracts for this transaction...');
+      } else {
+        return undefined;
+      }
+    }
+
+    logger.info(`Deploying contracts using factory...`);
+
+    from = from || (await getSigner());
+    const receipt = await from?.sendTransaction(populatedDeployTransaction);
+
+    return await receipt.wait();
+  }
+
+  // NOTE: contractsInfo must be sorted by deployment order
+  async saveAndVerifyFactoryContracts(
+    contractsInfo: Array<ContractInfo>,
+    deployTransaction?: ethers.providers.TransactionReceipt,
+    externalTask?: Task,
+    factoryAddress?: string
+  ): Promise<void> {
+    const { ethers } = await import('hardhat');
+
+    if (deployTransaction == null) {
+      // All contracts are deployed by the one factory transaction, so we can find the transaction hash by the first element
+      const deployedAddress = this.output()[contractsInfo[0].name];
+      const deploymentTxHash = getContractDeploymentTransactionHash(deployedAddress, this.network);
+      deployTransaction = await ethers.provider.getTransactionReceipt(deploymentTxHash);
+    }
+
+    // Pass in an external task if the artifacts are not in the present task.
+    // For instance, vault-factory-v2, where for safety we don't want to duplicate the artifacts.
+    const artifactSource = externalTask === undefined ? this : externalTask;
+
+    for (const contractInfo of contractsInfo) {
+      const isDeployedBytecodeValid = await this.checkBytecodeAndSaveEVMState(
+        deployTransaction,
+        artifactSource.artifact(contractInfo.name),
+        contractInfo.expectedAddress,
+        contractInfo.args,
+        factoryAddress
+      );
+
+      if (isDeployedBytecodeValid && this.mode === TaskMode.CHECK) {
+        logger.success(`Verified contract '${contractInfo.name}' on network '${this.network}' of task '${this.id}'`);
+      }
+
+      if (isDeployedBytecodeValid == false) {
+        throw Error(
+          `Contract ${contractInfo.name} at ${contractInfo.expectedAddress} does not match expected bytecode with abi.`
+        );
+      }
+
+      if (this.mode === TaskMode.CHECK) {
+        continue;
+      }
+
+      const instance = await this.instanceAt(contractInfo.name, contractInfo.expectedAddress);
+      this.save({ [contractInfo.name]: instance });
+      logger.success(`Contract ${contractInfo.name} attached at ${contractInfo.expectedAddress}`);
+
+      if (this.mode === TaskMode.LIVE) {
+        saveContractDeploymentTransactionHash(
+          contractInfo.expectedAddress,
+          deployTransaction.transactionHash,
+          this.network
+        );
+      }
+
+      await this.verify(contractInfo.name, contractInfo.expectedAddress, contractInfo.args, undefined, externalTask);
+    }
+  }
+
+  async createEVM(): Promise<EVM> {
+    const common = new Common({ chain: Chain.Mainnet, hardfork: Hardfork.Cancun });
+    const evm = await EVM.create({
+      common,
+    });
+    return evm;
+  }
+
+  // NOTE: If a contract is deployed by a factory, we must set the factoryAddress in the function arguments.
+  async checkBytecodeAndSaveEVMState(
+    deployTransaction: ethers.providers.TransactionReceipt,
+    artifact: Artifact,
+    contractAddress: string,
+    args: Array<Param> = [],
+    factoryAddress?: string
+  ): Promise<boolean> {
+    const { ethers } = await import('hardhat');
+
+    const runBytecode = hexToBytes(
+      ethers.utils.hexlify(
+        ethers.utils.concat([artifact.bytecode, new ethers.utils.Interface(artifact.abi).encodeDeploy(args)])
+      )
+    );
+
+    const block = await ethers.provider.getBlock(deployTransaction.blockNumber);
+    if (!block) {
+      throw Error(`Could not find block ${deployTransaction.blockNumber}`);
+    }
+
+    const evm = await this.evm;
+    const res = await evm.runCode({
+      code: runBytecode,
+      to: Address.fromString(contractAddress),
+      caller: factoryAddress ? Address.fromString(factoryAddress) : Address.fromString(deployTransaction.from),
+      origin: Address.fromString(deployTransaction.from),
+      block: {
+        header: {
+          number: BigInt(block.number),
+          timestamp: BigInt(block.timestamp),
+          cliqueSigner: () => Address.fromString(ethers.constants.AddressZero),
+          coinbase: Address.fromString(ethers.constants.AddressZero),
+          difficulty: BigInt(0),
+          gasLimit: block.gasLimit.toBigInt(),
+          prevRandao: hexToBytes(ethers.constants.HashZero),
+          baseFeePerGas: undefined,
+          getBlobGasPrice: () => undefined,
+        },
+      },
+    });
+
+    if (res.exceptionError) {
+      new Error(`computeDeployedBytecode failed: ${res.exceptionError}`);
+    }
+
+    await evm.stateManager.putContractCode(Address.fromString(contractAddress), res.returnValue);
+
+    const deployedCode = await ethers.provider.getCode(contractAddress);
+    return ethers.utils.hexValue(res.returnValue) == deployedCode;
+  }
+
   async deploy(
     name: string,
     args: Array<Param> = [],
@@ -135,22 +308,37 @@ export default class Task {
       instance = await this.instanceAt(name, output[name]);
     }
 
+    await this.saveInInternalEVMState(instance.address);
+
     return instance;
+  }
+
+  async saveInInternalEVMState(address: string): Promise<void> {
+    const { ethers } = await import('hardhat');
+    const evm = await this.evm;
+
+    await evm.stateManager.putContractCode(
+      Address.fromString(address),
+      hexToBytes(await ethers.provider.getCode(address))
+    );
   }
 
   async verify(
     name: string,
     address: string,
     constructorArguments: string | unknown[],
-    libs?: Libraries
+    libs?: Libraries,
+    externalTask?: Task
   ): Promise<void> {
     if (this.mode !== TaskMode.LIVE) {
       return;
     }
 
+    const task = externalTask === undefined ? this : externalTask;
+
     try {
       if (!this._verifier) return logger.warn('Skipping contract verification, no verifier defined');
-      const url = await this._verifier.call(this, name, address, constructorArguments, libs);
+      const url = await this._verifier.call(task, name, address, constructorArguments, libs);
       logger.success(`Verified contract ${name} at ${url}`);
     } catch (error) {
       logger.error(`Failed trying to verify ${name} at ${address}: ${error}`);
@@ -194,6 +382,8 @@ export default class Task {
       );
     }
 
+    await this.saveInInternalEVMState(deployedAddress);
+
     // We need to return an instance so that the task may carry on, potentially using this as input of future
     // deployments.
     return this.instanceAt(name, deployedAddress);
@@ -208,25 +398,53 @@ export default class Task {
   dir(): string {
     if (!this.id) throw Error('Please provide a task deployment ID to run');
 
-    // The task might be deprecated, so it may not exist in the main directory. We first look there, but don't require
-    // that the directory exists.
+    const __dir = (versionRoot: string): string | undefined => {
+      // The task might be deprecated, so it may not exist in the main directory. We first look there, but don't require
+      // that the directory exists.
 
-    const nonDeprecatedDir = this._dirAt(TASKS_DIRECTORY, this.id, false);
-    if (this._existsDir(nonDeprecatedDir)) {
-      return nonDeprecatedDir;
+      const nonDeprecatedDir = this._dirAt(getTasksDir(versionRoot), this.id, false);
+      if (this._existsDir(nonDeprecatedDir)) {
+        return nonDeprecatedDir;
+      }
+
+      const deprecatedDir = this._dirAt(getDeprecatedDir(versionRoot), this.id, false);
+      if (this._existsDir(deprecatedDir)) {
+        return deprecatedDir;
+      }
+
+      const scriptsDir = this._dirAt(getScriptsDir(versionRoot), this.id, false);
+      if (this._existsDir(scriptsDir)) {
+        return scriptsDir;
+      }
+
+      return undefined;
+    };
+
+    for (const versionRoot of VERSION_ROOTS) {
+      const dirFound = __dir(versionRoot);
+      if (dirFound !== undefined) {
+        return dirFound;
+      }
     }
 
-    const deprecatedDir = this._dirAt(DEPRECATED_DIRECTORY, this.id, false);
-    if (this._existsDir(deprecatedDir)) {
-      return deprecatedDir;
+    throw Error(`Could not find a directory at ${VERSION_ROOTS}`);
+  }
+
+  version(): string {
+    const taskDir = this.dir();
+
+    const isSubdir = (parent: string, dir: string) => {
+      const relative = path.relative(parent, dir);
+      return relative && !relative.startsWith('..') && !path.isAbsolute(relative);
+    };
+
+    for (const versionRoot of VERSION_ROOTS) {
+      if (isSubdir(versionRoot, taskDir)) {
+        return path.basename(versionRoot);
+      }
     }
 
-    const scriptsDir = this._dirAt(SCRIPTS_DIRECTORY, this.id, false);
-    if (this._existsDir(scriptsDir)) {
-      return scriptsDir;
-    }
-
-    throw Error(`Could not find a directory at ${nonDeprecatedDir}, ${deprecatedDir} or ${scriptsDir}`);
+    throw new Error('Unknown version');
   }
 
   buildInfo(fileName: string): BuildInfo {
@@ -319,12 +537,23 @@ export default class Task {
 
   getStatus(): TaskStatus {
     const taskDirectory = this.dir();
-    if (taskDirectory === path.join(TASKS_DIRECTORY, this.id)) {
-      return TaskStatus.ACTIVE;
-    } else if (taskDirectory === path.join(DEPRECATED_DIRECTORY, this.id)) {
-      return TaskStatus.DEPRECATED;
-    } else if (taskDirectory === path.join(SCRIPTS_DIRECTORY, this.id)) {
-      return TaskStatus.SCRIPT;
+    const __taskStatus = (versionRoot: string): TaskStatus | undefined => {
+      if (taskDirectory === path.join(getTasksDir(versionRoot), this.id)) {
+        return TaskStatus.ACTIVE;
+      } else if (taskDirectory === path.join(getDeprecatedDir(versionRoot), this.id)) {
+        return TaskStatus.DEPRECATED;
+      } else if (taskDirectory === path.join(getScriptsDir(versionRoot), this.id)) {
+        return TaskStatus.SCRIPT;
+      } else {
+        return undefined;
+      }
+    };
+
+    for (const versionRoot of VERSION_ROOTS) {
+      const taskStatus = __taskStatus(versionRoot);
+      if (taskStatus !== undefined) {
+        return taskStatus;
+      }
     }
 
     throw new Error('Unknown task status');
@@ -452,11 +681,20 @@ export default class Task {
    * Return all directories inside the top 3 fixed task directories in a flat, sorted array.
    */
   static getAllTaskIds(): string[] {
-    // Some operating systems may insert hidden files that should not be listed, so we just look for directories when
-    // reading the file system.
-    return [TASKS_DIRECTORY, DEPRECATED_DIRECTORY, SCRIPTS_DIRECTORY]
-      .map((dir) => fs.readdirSync(dir).filter((fileName) => fs.lstatSync(path.resolve(dir, fileName)).isDirectory()))
-      .flat()
-      .sort();
+    const __versionTaskIds = (versionRoot: string): string[] => {
+      // Some operating systems may insert hidden files that should not be listed, so we just look for directories when
+      // reading the file system.
+      return [getTasksDir(versionRoot), getDeprecatedDir(versionRoot), getScriptsDir(versionRoot)]
+        .map((dir) => fs.readdirSync(dir).filter((fileName) => fs.lstatSync(path.resolve(dir, fileName)).isDirectory()))
+        .flat()
+        .sort();
+    };
+
+    let taskIds: string[] = [];
+    for (const versionRoot of VERSION_ROOTS) {
+      taskIds = taskIds.concat(__versionTaskIds(versionRoot));
+    }
+
+    return taskIds;
   }
 }
