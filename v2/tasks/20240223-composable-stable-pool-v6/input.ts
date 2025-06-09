@@ -12,7 +12,8 @@ export type ComposableStablePoolDeployment = {
 const Vault = new Task('20210418-vault', TaskMode.READ_ONLY);
 const ProtocolFeePercentagesProvider = new Task('20220725-protocol-fee-percentages-provider', TaskMode.READ_ONLY);
 const WETH = new Task('00000000-tokens', TaskMode.READ_ONLY);
-const BAL = new Task('00000000-tokens', TaskMode.READ_ONLY);
+// const BAL = new Task('00000000-tokens', TaskMode.READ_ONLY);
+const BAL = "0x0000000000000000000000000000000000000402";
 
 const BaseVersion = { version: 6, deployment: '20240223-composable-stable-pool-v6' };
 
