@@ -9,6 +9,7 @@ const Vault = new Task('20241204-v3-vault', TaskMode.READ_ONLY);
 // See https://github.com/BalancerMaxis/bal_addresses/blob/main/outputs/addressbook.json#L268
 const MaxiOmniMultisig = '0x9ff471F9f98F42E5151C7855fD1b5aa906b1AF7e';
 const SepoliaAdmin = '0x9098b50ee2d9E4c3C69928A691DA3b192b4C9673';
+const DEPLOYER = '0x0f14341A7f464320319025540E8Fe48Ad0fe5aec';
 
 export default {
   Vault,
@@ -32,5 +33,11 @@ export default {
   },
   sepolia: {
     FeeRecipient: SepoliaAdmin,
+  },
+  crab: {
+    FeeRecipient: DEPLOYER,
+  },
+  darwinia: {
+    FeeRecipient: DEPLOYER,
   },
 };
