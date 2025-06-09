@@ -18,6 +18,8 @@ export const NETWORKS = [
   'base',
   'fraxtal',
   'mode',
+  'crab',
+  'darwinia',
 ];
 
 export type Network = (typeof NETWORKS)[number];
