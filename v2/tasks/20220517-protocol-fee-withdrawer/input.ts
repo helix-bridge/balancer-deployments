@@ -47,6 +47,12 @@ export default {
   mode: {
     InitialDeniedTokens: [],
   },
+  crab: {
+    InitialDeniedTokens: [],
+  },
+  darwinia: {
+    InitialDeniedTokens: [],
+  },
   sepolia: {
     InitialDeniedTokens: [],
   },

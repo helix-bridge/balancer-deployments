@@ -1,0 +1,181 @@
+{
+  "20210418-authorizer": {
+    "contracts": [
+      {
+        "name": "Authorizer",
+        "address": "0xee9E150784261A49d56bFB382aE7dD272Df1155A"
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  "20210418-vault": {
+    "contracts": [
+      {
+        "name": "Vault",
+        "address": "0x3aa4F2daF93803B789a2233f1c9Cb374Ceb96a6B"
+      },
+      {
+        "name": "ProtocolFeesCollector",
+        "address": "0x94dCa5Fa4a48Cee9E6e5613392413EAEe0c2C4Cf"
+      },
+      {
+        "name": "BalancerHelpers",
+        "address": "0x4F1C48B1eacE6953f1dCcD301327B735Ca0CC501"
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  "20211202-no-protocol-fee-lbp": {
+    "contracts": [
+      {
+        "name": "NoProtocolFeeLiquidityBootstrappingPoolFactory",
+        "address": "0x82807d09863987Df3b13F7b966411CbDe48FA930"
+      },
+      {
+        "name": "MockLiquidityBootstrappingPool",
+        "address": "0xB400d5a07Fb9BbfbB5f8cEbCe2E5E0dB79edB336"
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  "20220325-authorizer-adaptor": {
+    "contracts": [
+      {
+        "name": "AuthorizerAdaptor",
+        "address": "0x310084E92d18DFC3f3187630e1609de513d58C14"
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  "20220517-protocol-fee-withdrawer": {
+    "contracts": [
+      {
+        "name": "ProtocolFeesWithdrawer",
+        "address": "0xB54cAc2532b9A0794BD2cA8Eb081D3EC597D507B"
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  "20220721-balancer-queries": {
+    "contracts": [
+      {
+        "name": "BalancerQueries",
+        "address": "0xd39690825638437539Bcda4fA867A7b5a879761e"
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  "20220725-protocol-fee-percentages-provider": {
+    "contracts": [
+      {
+        "name": "ProtocolFeePercentagesProvider",
+        "address": "0x5732669BC59C7AFe1a9Bec259367Fa6C27ae2A18"
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  "20221123-pool-recovery-helper": {
+    "contracts": [
+      {
+        "name": "PoolRecoveryHelper",
+        "address": "0x39B0B41e1166eDa9D7488087D66067327548DE7C"
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  "20221124-authorizer-adaptor-entrypoint": {
+    "contracts": [
+      {
+        "name": "AuthorizerAdaptorEntrypoint",
+        "address": "0x6DBcCdf4772b1031b28482aa136ae47deE30eD39"
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  "20230223-protocol-id-registry": {
+    "contracts": [
+      {
+        "name": "ProtocolIdRegistry",
+        "address": "0x7147e15e96fDc4d31327Dba4a3cE59f763ACAB38"
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  "20230320-weighted-pool-v4": {
+    "contracts": [
+      {
+        "name": "WeightedPoolFactory",
+        "address": "0x27d2Abb20625f8c5D07eA0836E856bB5e7588803"
+      },
+      {
+        "name": "MockWeightedPool",
+        "address": "0x5F04edABcd3A170fBE0786f17f2Dc302947AC46E"
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  "20230411-managed-pool-v2": {
+    "contracts": [
+      {
+        "name": "ManagedPoolAddRemoveTokenLib",
+        "address": "0x04c95259746Ffd749B8B7c0f2492ea8E74FF144a"
+      },
+      {
+        "name": "CircuitBreakerLib",
+        "address": "0x19A7070AD7E753209F30216bdaBf8073aB33E5b4"
+      },
+      {
+        "name": "ManagedPoolAmmLib",
+        "address": "0xD9E52c166837179499536c5450E2300A0E038471"
+      },
+      {
+        "name": "ExternalWeightedMath",
+        "address": "0xF133E493d937FfEC34FaB268E3a1aFB15922aa88"
+      },
+      {
+        "name": "RecoveryModeHelper",
+        "address": "0x2237B96596ec831a62200ec3a7829c58551136Aa"
+      },
+      {
+        "name": "ManagedPoolFactory",
+        "address": "0xb634F13B9ed853Ab466Ea37f4fD08Fae84C9797B"
+      },
+      {
+        "name": "MockManagedPool",
+        "address": "0xDEA79322548e20e76dA5049EE89f011276245a4c"
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  "20230414-authorizer-wrapper": {
+    "contracts": [
+      {
+        "name": "AuthorizerWithAdaptorValidation",
+        "address": "0x3233bc8De6D7eFd59e38F7D97B963651B6fB9390"
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  "20230613-balancer-pool-data-queries": {
+    "contracts": [
+      {
+        "name": "BalancerPoolDataQueries",
+        "address": "0xc8e896cF109F43b5Dd32fe9F48Bd8228d5b45218"
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  "20240223-composable-stable-pool-v6": {
+    "contracts": [
+      {
+        "name": "ComposableStablePoolFactory",
+        "address": "0xC22B21062018545f7466278D8F74921EA8489d85"
+      },
+      {
+        "name": "MockComposableStablePool",
+        "address": "0x9D61b16C5D0deFB1a74fC5f9a2F991615ee4C13f"
+      }
+    ],
+    "status": "ACTIVE"
+  }
+}
