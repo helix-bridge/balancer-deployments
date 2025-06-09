@@ -519,6 +519,7 @@ export default {
           browserURL: 'https://explorer.darwinia.network',
         }
       },
+      {
         network: 'avalanche',
         chainId: 43114,
         urls: {
