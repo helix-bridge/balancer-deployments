@@ -6,7 +6,8 @@
         "address": "0xc254EE0075aF3317b261F541Eea000261c68CEE0"
       }
     ],
-    "status": "ACTIVE"
+    "status": "ACTIVE",
+    "version": "v2"
   },
   "20210418-vault": {
     "contracts": [
@@ -23,7 +24,8 @@
         "address": "0x20a3aECC92Cd6901aD98f777480e41f9880e131E"
       }
     ],
-    "status": "ACTIVE"
+    "status": "ACTIVE",
+    "version": "v2"
   },
   "20211202-no-protocol-fee-lbp": {
     "contracts": [
@@ -36,7 +38,8 @@
         "address": "0x5843199C8530f43aA1bae8D43a44423B1F8dD711"
       }
     ],
-    "status": "ACTIVE"
+    "status": "ACTIVE",
+    "version": "v2"
   },
   "20220325-authorizer-adaptor": {
     "contracts": [
@@ -45,7 +48,8 @@
         "address": "0xdb0F7E0780e1F4Dc780CB148fe23917457B16a7c"
       }
     ],
-    "status": "ACTIVE"
+    "status": "ACTIVE",
+    "version": "v2"
   },
   "20220517-protocol-fee-withdrawer": {
     "contracts": [
@@ -54,7 +58,8 @@
         "address": "0x6c1c123e972D7a2DB02b2A11e21a53746aaB2B2f"
       }
     ],
-    "status": "ACTIVE"
+    "status": "ACTIVE",
+    "version": "v2"
   },
   "20220721-balancer-queries": {
     "contracts": [
@@ -63,7 +68,8 @@
         "address": "0x6a35fF794123057d87Ad4c0246A5B75D2E66B4FE"
       }
     ],
-    "status": "ACTIVE"
+    "status": "ACTIVE",
+    "version": "v2"
   },
   "20220725-protocol-fee-percentages-provider": {
     "contracts": [
@@ -72,7 +78,8 @@
         "address": "0x95A481313Bc478c43F4aa5fBe7658AC17fd2ab19"
       }
     ],
-    "status": "ACTIVE"
+    "status": "ACTIVE",
+    "version": "v2"
   },
   "20221123-pool-recovery-helper": {
     "contracts": [
@@ -81,7 +88,8 @@
         "address": "0x1E6f45EbBe71897108cfe66257D87575f41F54fD"
       }
     ],
-    "status": "ACTIVE"
+    "status": "ACTIVE",
+    "version": "v2"
   },
   "20221124-authorizer-adaptor-entrypoint": {
     "contracts": [
@@ -90,7 +98,8 @@
         "address": "0xE658ec634d6B34cC3409b4746e611B036b746Fd8"
       }
     ],
-    "status": "ACTIVE"
+    "status": "ACTIVE",
+    "version": "v2"
   },
   "20230223-protocol-id-registry": {
     "contracts": [
@@ -99,7 +108,8 @@
         "address": "0xF949E38f8b2EeeEcDD9A378E33ff9Fb07985E3A1"
       }
     ],
-    "status": "ACTIVE"
+    "status": "ACTIVE",
+    "version": "v2"
   },
   "20230320-weighted-pool-v4": {
     "contracts": [
@@ -112,7 +122,8 @@
         "address": "0xC0A9D96921d155a3177E4d2DcaF6025ee08476b9"
       }
     ],
-    "status": "ACTIVE"
+    "status": "ACTIVE",
+    "version": "v2"
   },
   "20230411-managed-pool-v2": {
     "contracts": [
@@ -145,7 +156,8 @@
         "address": "0x154fAED1d13Df7fD2e4af9d3fe4FC0FCd8f0451C"
       }
     ],
-    "status": "ACTIVE"
+    "status": "ACTIVE",
+    "version": "v2"
   },
   "20230414-authorizer-wrapper": {
     "contracts": [
@@ -154,7 +166,8 @@
         "address": "0xdDa858144c056C8549fF4ECb6f0AacB07e0E59Cf"
       }
     ],
-    "status": "ACTIVE"
+    "status": "ACTIVE",
+    "version": "v2"
   },
   "20230613-balancer-pool-data-queries": {
     "contracts": [
@@ -163,7 +176,8 @@
         "address": "0xf84cac22846516C104Eab2092f0C48f267Fe51D8"
       }
     ],
-    "status": "ACTIVE"
+    "status": "ACTIVE",
+    "version": "v2"
   },
   "20240223-composable-stable-pool-v6": {
     "contracts": [
@@ -176,6 +190,299 @@
         "address": "0xC3f959fF0735E43048c8B723c47679E2f2e3E87e"
       }
     ],
-    "status": "ACTIVE"
+    "status": "ACTIVE",
+    "version": "v2"
+  },
+  "20241204-v3-vault": {
+    "contracts": [
+      {
+        "name": "VaultFactory",
+        "address": "0x38848a19f35449745f1F20E6cD960C2d9Fc1F628"
+      },
+      {
+        "name": "ProtocolFeeController",
+        "address": "0xb2b477a53058E05E8fd7Ffc43030ad0420F97E84"
+      },
+      {
+        "name": "VaultAdmin",
+        "address": "0xa2c7064D028Df0c598159a7f545110709c6C2e9D"
+      },
+      {
+        "name": "VaultExtension",
+        "address": "0x3080D88e9302412dEb0237Aa8d26b47De97a1611"
+      },
+      {
+        "name": "Vault",
+        "address": "0xD3D766305793ac991D0312982A920a120979FB69"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20241205-v3-batch-router": {
+    "contracts": [
+      {
+        "name": "BatchRouter",
+        "address": "0x735c515f881B462bA91221BFf51b39F01dB483BA"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20241205-v3-buffer-router": {
+    "contracts": [
+      {
+        "name": "BufferRouter",
+        "address": "0x08408009f566978217B62e5B75D4285af8794ed5"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20241205-v3-weighted-pool": {
+    "contracts": [
+      {
+        "name": "WeightedPoolFactory",
+        "address": "0xb7Ec8B9BbE8109EB295d72E2959ff1392fc267b1"
+      },
+      {
+        "name": "MockWeightedPool",
+        "address": "0xe1bEDC877Fa78Acf857D76Aa94B2f6B8f22C5250"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20241213-v3-hook-examples": {
+    "contracts": [
+      {
+        "name": "FeeTakingHookExample",
+        "address": "0x3d0B1cF076AcbB66d869372958e5f60cd2175E75"
+      },
+      {
+        "name": "ExitFeeHookExample",
+        "address": "0x6DB31a33EC4F3ED3d2986EC590DFb700F11b96F9"
+      },
+      {
+        "name": "NftLiquidityPositionExample",
+        "address": "0x8ec6AD4D9c1942e6D78347204112534fb04Ce0Cb"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20250117-v3-contract-registry": {
+    "contracts": [
+      {
+        "name": "BalancerContractRegistry",
+        "address": "0xCB4856FB94752A2BdB65e8C7711f21F1E94D2570"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20250120-v3-gyro-2clp": {
+    "contracts": [
+      {
+        "name": "Gyro2CLPPoolFactory",
+        "address": "0xAfF1cA0FD54F9F00129c0dbD9FEcB17A68307e61"
+      },
+      {
+        "name": "MockGyro2CLPPool",
+        "address": "0xca42a131c94dB7DD1D2Cd70Ed3710fD6F4283EF9"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20250123-v3-composite-liquidity-router-v2": {
+    "contracts": [
+      {
+        "name": "CompositeLiquidityRouter",
+        "address": "0x58CCf1B01369Ea263591518c8E5FD1a9B6BD85ED"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20250124-v3-gyro-eclp": {
+    "contracts": [
+      {
+        "name": "GyroECLPPoolFactory",
+        "address": "0x01D1Cb6D629536b893f2343B95124aDB6a8ae68b"
+      },
+      {
+        "name": "MockGyroECLPPool",
+        "address": "0x178100849C933a63C1B663B1635429d086cF1b86"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20250212-v3-mev-capture-hook": {
+    "contracts": [
+      {
+        "name": "MevCaptureHook",
+        "address": "0x5EB9c67D980BFDc0565B772846bE83d1E41b7ac4"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20250214-v3-protocol-fee-controller-v2": {
+    "contracts": [
+      {
+        "name": "ProtocolFeeController",
+        "address": "0x1E3D1E9Da4b970361fafa855dFE5e8faA4a59BaE"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20250218-v3-aggregator-router": {
+    "contracts": [
+      {
+        "name": "AggregatorRouter",
+        "address": "0xCB625c31019db7395b65C5DaB3328C8168D89b0C"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20250307-v3-liquidity-bootstrapping-pool": {
+    "contracts": [
+      {
+        "name": "LBPoolFactory",
+        "address": "0x4F195276A21085A35788135F1C1D56a750330C24"
+      },
+      {
+        "name": "MockLBPool",
+        "address": "0x4493D58f688A1F01b4ad0Dc436985dD185743816"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20250307-v3-router-v2": {
+    "contracts": [
+      {
+        "name": "Router",
+        "address": "0x37E58Eb1C44DD318386d826D972444c3C41eE4FF"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20250324-v3-stable-pool-v2": {
+    "contracts": [
+      {
+        "name": "StablePoolFactory",
+        "address": "0x5313Bf259a4C723cdD6bE4B6387d21321f180D03"
+      },
+      {
+        "name": "MockStablePool",
+        "address": "0x56e2A00BBc98f68E01ab16761f699CfC3d066041"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20250403-v3-stable-surge-hook-v2": {
+    "contracts": [
+      {
+        "name": "StableSurgeHook",
+        "address": "0xe050e2667AD829F652e7147f775886Cb726CC617"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20250404-v3-stable-surge-pool-factory-v2": {
+    "contracts": [
+      {
+        "name": "StableSurgePoolFactory",
+        "address": "0x7b54fD0fCE90D75637DD256a8ac38Ac264a46dFc"
+      },
+      {
+        "name": "MockStablePool",
+        "address": "0xF3f837ABc6c710192484880D0b482e08738AF491"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20250407-v3-vault-explorer-v2": {
+    "contracts": [
+      {
+        "name": "VaultExplorer",
+        "address": "0xE67744B1930429B64cc402583c7089F8f5f0F7E6"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20250418-v3-wrapped-bpt": {
+    "contracts": [
+      {
+        "name": "WrappedBalancerPoolTokenFactory",
+        "address": "0x614C77c1B8bfBcDF8bF7DD99B1dbD8Bfb5F7Ded4"
+      },
+      {
+        "name": "MockWrappedBalancerPoolToken",
+        "address": "0x037B297583c80243675807e9e1BD3cD3ba2560cC"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20250430-v3-pool-pause-helper": {
+    "contracts": [
+      {
+        "name": "PoolPauseHelper",
+        "address": "0x4da91C99cD8A52806eBbD58ED84fE166e3dd9d1d"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20250430-v3-pool-swap-fee-helper": {
+    "contracts": [
+      {
+        "name": "PoolSwapFeeHelper",
+        "address": "0x9463a9c02cCDd64a8919cA19516D9E72b9448643"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20250430-v3-protocol-fee-helper": {
+    "contracts": [
+      {
+        "name": "ProtocolFeeHelper",
+        "address": "0xFbB0D2CB6AB3ee2042925743a2026846AeA96E65"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20250502-v3-fee-percentages-provider": {
+    "contracts": [
+      {
+        "name": "ProtocolFeePercentagesProvider",
+        "address": "0x4e125453ef9A2255b2ed34131D091d59F0f04F3f"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
+  },
+  "20250503-v3-protocol-fee-sweeper-v2": {
+    "contracts": [
+      {
+        "name": "ProtocolFeeSweeper",
+        "address": "0x4D40227d3Ad4f271fB0DBE568C63a7911a6c871c"
+      }
+    ],
+    "status": "ACTIVE",
+    "version": "v3"
   }
 }
